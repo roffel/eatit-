@@ -6,6 +6,7 @@ class Bootstrap
 	{
 		$url = isset($_GET['url']) ? $_GET['url'] : null ;// Als er een url is - zo niet zet dan op 0.
 		$url = rtrim($url, '/');	// Laatste "/"" weghalen zodat ie niet in de war komt
+		$url = filter_var($url, FILTER_SANITIZE_URL);
 		$url = explode('/', $url); // Zorgen voor "controller/method"
 
 		//print_r($url);

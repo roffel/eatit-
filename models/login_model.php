@@ -10,16 +10,14 @@ class Login_Model extends Model
 	public function run()
 	{
 		// sth = statement
-		$sth = $this->db->prepare("SELECT id FROM klanten WHERE
-			email = :email AND wachtwoord = :password");
+		$sth = $this->db->prepare("SELECT klantnummer FROM klanten WHERE
+			email = :email AND code = :code");
 		$sth->execute(array(
 			':email' 	=> $_POST['email'],
-			':password' => $_POST['wachtwoord']
+			':code' => $_POST['code']
 		));
-
-		//$data 	= $sth->fetchAll();
+		$data 	= $sth->fetchAll();
 		$count 	=  $sth->rowCount();
-		echo $count;
 		if($count > 0)
 		{
 			Session::init();
@@ -30,7 +28,5 @@ class Login_Model extends Model
 		{
 			header('location: ../login');
 		}
-
-		print_r($data);
 	}
 }

@@ -10,6 +10,7 @@
 			<a href="<?=URL?>index">Home</a>
 			<a href="<?=URL?>menus">Menu's</a>
 			<?php if (Session::get('loggedIn') == true):?>
+				<a href="<?php echo URL; ?>orders">Bestellijst</a>	
 				<a href="<?php echo URL; ?>dashboard/logout">Uitloggen</a>	
 			<?php else: ?>
 				<a href="<?php echo URL; ?>login">Inloggen</a>

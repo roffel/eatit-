@@ -13,10 +13,9 @@ class Menus extends Controller
 		$this->view->render('menus/index');
 	}
 
-	public function details()
+	public function details($id)
 	{
-		$this->view->data = $this->model->getbyid(1);
+		$this->view->data = $this->model->getbyid($id);
 		$this->view->render('menus/details');
-		var_dump($_GET);
 	}
 }

@@ -4,8 +4,8 @@ $menus = $this->data;
 
 foreach ($menus as $menu) {
 	echo "<div onclick=\"location.href='menus/details/$menu[id]';\" class=\"active-menu\">";
-    echo "	<h2>$menu[titel]</h2>\n";
-    echo "	<p>$menu[beschrijving]</p>\n";
+    echo "	<h2>$menu[naam]</h2>\n";
+    echo "	<p>$menu[omschrijving]</p>\n";
     echo "</div>";
 }
 ?>
