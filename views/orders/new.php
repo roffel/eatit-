@@ -25,6 +25,14 @@
 </div>
 <div class="bright floatr">
 	<strong>Nog iets te drinken?</strong>
+	<ul id="drinklist">
+		<?php
+		foreach ($orderregels['dranken'] as $drank)
+		{
+			echo '<li><a href="'.URL.'orders/addtoorder/'.$drank['dranknr'].'-side">+ '.$drank['naam'].'(&euro; '.$drank['prijs'].')</a></li>';
+		}
+		?>
+	</ul>
 </div>
 <div style="clear: both;"></div>
 <script>

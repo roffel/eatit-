@@ -18,7 +18,7 @@ class Orders_Model extends Model
 			
 			foreach($_SESSION['basket'] as $i => $basketItems)
 			{
-				if($basketItems['menunr'] == $menunr)
+				if($basketItems['menunr'] == $menunr && $basketItems['soort'] == $kind)
 				{
 					$idx = $i;
 					break;
@@ -51,19 +51,34 @@ class Orders_Model extends Model
 	}
 	function getneworder()
 	{
-		//Session::destroy();
 		Session::init();
 		$data = $_SESSION['basket'];
 		$orderlist = array();
 		$subtotaal = 0;
 		foreach($data as $orderregel)
 		{
-			$details = $this->db->select('
-			SELECT 
-				*
-			FROM Menu
-			WHERE Menu.menunr = :id'
-			, array(':id' => $orderregel['menunr']));
+			$soort = $orderregel['soort'];
+
+			if($soort == "menu")
+			{
+				$details = $this->db->select('
+				SELECT 
+					*
+				FROM Menu
+				WHERE Menu.menunr = :id'
+				, array(':id' => $orderregel['menunr']));
+			}
+			if($soort == "side")
+			{
+				$details = $this->db->select('
+				SELECT 
+					*
+				FROM Drank
+				WHERE Drank.dranknr = :id'
+				, array(':id' => $orderregel['menunr']));
+			}
+
+
 			$totaal = 0 + ($details[0]['prijs'] * $orderregel['aantal']);
 			$orderlist[] = array(
 				"menunr"	=> $orderregel['menunr'],
@@ -75,6 +90,7 @@ class Orders_Model extends Model
 			);
 			$subtotaal = $subtotaal + ($details[0]['prijs'] * $orderregel['aantal']);
 		}
+		$orderlist["dranken"] = $this->db->select('SELECT * FROM Drank');
 		$orderlist["subtotaal"] = $subtotaal;
 		return $orderlist;
 	}

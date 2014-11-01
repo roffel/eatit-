@@ -72,6 +72,22 @@ body{
 	padding: 20px;
 }
 
+#drinklist{
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+#drinklist li{
+	list-style-type: none;
+}
+
+#drinklist li a{
+	text-decoration: none;
+	color: grey;
+	cursor: pointer;
+}
+
 /* Misc */
 
 .big-btn{
