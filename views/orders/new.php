@@ -20,6 +20,7 @@
 	echo "<tr><td></td><td></td><td>Subtotaal:</td><td>&euro; ".$orderregels['subtotaal']."</td></tr>";
 	echo "</table>";
 	?>
+	<br />
 	<div class="big-btn floatr">Bestellen</div>
 </div>
 <div class="bright floatr">

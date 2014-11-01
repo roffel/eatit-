@@ -1,5 +1,4 @@
 <?php
-
 class Orders_Model extends Model 
 { 			 // Business logic
 	function __construct()
@@ -13,19 +12,30 @@ class Orders_Model extends Model
 		if (Session::get('basket'))
 		{
 			$order 		= explode('-',$order);
-			$menuid		= $order[0];
+			$menunr		= $order[0];
 			$kind		= $order[1];
-			foreach($_SESSION['basket'] as $key=>$basket)
+			$idx		= -1;
+			
+			foreach($_SESSION['basket'] as $i => $basketItems)
 			{
-				if (in_array($menuid, $basket))
-				{	// Als het er al wel in staat
-	    			//echo "<script>alert('In array');</script>";
-	    			$_SESSION['basket'][$key]['aantal']++;
-				}
-				else // Als nog niet in winkelwagen
+				if($basketItems['menunr'] == $menunr)
 				{
-					$_SESSION['basket'][] = array("menunr" => $menuid, "soort" => $kind, "aantal" => '1');
+					$idx = $i;
+					break;
 				}
+			}
+			if ($idx == -1)
+			{
+				// Als ze nog niet in de kar zitten
+				$_SESSION['basket'][] = array(
+					"menunr" => $menunr,
+					"soort" => $kind,
+					"aantal" => 1
+				);
+			}
+			else
+			{
+				$_SESSION['basket'][$idx]['aantal']++;
 			}
 		}
 		else
@@ -33,13 +43,12 @@ class Orders_Model extends Model
 			Session::set('basket',true);
 			$_SESSION['basket'] = array();	
 			$order 		= explode('-',$order);
-			$menuid		= $order[0];
+			$menunr		= $order[0];
 			$kind		= $order[1];
-			$_SESSION['basket'][] = array("menunr" => $menuid, "soort" => $kind, "aantal" => '1');
+			$_SESSION['basket'][] = array("menunr" => $menunr, "soort" => $kind, "aantal" => '1');
 		}
 		header('location: ../');
 	}
-
 	function getneworder()
 	{
 		//Session::destroy();
