@@ -12,31 +12,61 @@ class Orders_Model extends Model
 		Session::init();
 		if (Session::get('basket'))
 		{
-			echo "session!!!";
 			$order 		= explode('-',$order);
 			$menuid		= $order[0];
 			$kind		= $order[1];
-			$_SESSION['basket'][] = array($menuid, $kind);
-			echo "<pre>";
-			print_r($_SESSION['basket']);
-			echo "</pre>";
+			foreach($_SESSION['basket'] as $key=>$basket)
+			{
+				if (in_array($menuid, $basket))
+				{	// Als het er al wel in staat
+	    			//echo "<script>alert('In array');</script>";
+	    			$_SESSION['basket'][$key]['aantal']++;
+				}
+				else // Als nog niet in winkelwagen
+				{
+					$_SESSION['basket'][] = array("menunr" => $menuid, "soort" => $kind, "aantal" => '1');
+				}
+			}
 		}
 		else
 		{
 			Session::set('basket',true);
 			$_SESSION['basket'] = array();	
-			$_SESSION['basket'][] = 'basket';
-			echo "No Session";
-			print_r($_SESSION['basket']);
+			$order 		= explode('-',$order);
+			$menuid		= $order[0];
+			$kind		= $order[1];
+			$_SESSION['basket'][] = array("menunr" => $menuid, "soort" => $kind, "aantal" => '1');
 		}
+		header('location: ../');
 	}
 
 	function getneworder()
 	{
-
+		//Session::destroy();
 		Session::init();
-		//S
-		$data = $_SESSION;
-		return $data;
+		$data = $_SESSION['basket'];
+		$orderlist = array();
+		$subtotaal = 0;
+		foreach($data as $orderregel)
+		{
+			$details = $this->db->select('
+			SELECT 
+				*
+			FROM Menu
+			WHERE Menu.menunr = :id'
+			, array(':id' => $orderregel['menunr']));
+			$totaal = 0 + ($details[0]['prijs'] * $orderregel['aantal']);
+			$orderlist[] = array(
+				"menunr"	=> $orderregel['menunr'],
+				"soort"		=> $orderregel['soort'],
+				"aantal"	=> $orderregel['aantal'],
+				"naam"		=> $details[0]['naam'],
+				"prijs"		=> $details[0]['prijs'],
+				"totaal"	=> $totaal
+			);
+			$subtotaal = $subtotaal + ($details[0]['prijs'] * $orderregel['aantal']);
+		}
+		$orderlist["subtotaal"] = $subtotaal;
+		return $orderlist;
 	}
 }

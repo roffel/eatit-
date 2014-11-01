@@ -10,11 +10,11 @@ class Login_Model extends Model
 	public function run()
 	{
 		// sth = statement
-		$sth = $this->db->prepare("SELECT klantnummer FROM klanten WHERE
-			email = :email AND code = :code");
+		$sth = $this->db->prepare("SELECT email FROM Gebruiker WHERE
+			email = :email AND password = :password");
 		$sth->execute(array(
 			':email' 	=> $_POST['email'],
-			':code' => $_POST['code']
+			':password' => $_POST['password']
 		));
 		$data 	= $sth->fetchAll();
 		$count 	=  $sth->rowCount();

@@ -1,13 +1,12 @@
 <?php
 $menus = $this->data;
-
 foreach ($menus as $menu)
 {
     echo "	<h1>Menu: $menu[naam]</h1>\n";
     echo "	<span>Categorie: Vegetarisch</span><br /> \n";
     echo "	<span>Prijs: &euro;$menu[prijs]</span>";
     echo "	<p>$menu[omschrijving]</p>\n";
-    echo ' 	<div class="detail-order-btn"><a href="'.URL.'orders/addtoorder/'.$menu['id'].'-menu">Bestellen</a></div>';
+    echo ' 	<div class="detail-order-btn"><a href="'.URL.'orders/addtoorder/'.$menu['menunr'].'-menu">Bestellen</a></div>';
 }
 
 echo "<h2>Op dit menu:</h2>";

@@ -39,6 +39,7 @@ body{
 	border: 1px solid silver;
 	width: 200px;
 	height: 250px;
+	cursor: pointer;
 }
 
 /* Content */
@@ -57,4 +58,47 @@ body{
 	border-top: 10px solid rgb(184,220,158);
 	padding: 20px;
 	min-height: 120px;
+}
+/* Bestellijst */
+.bleft{
+	width: 60%;
+	background-color: white;
+	padding: 20px;
+}
+
+.bright{
+	width: 20%;
+	background-color: white;
+	padding: 20px;
+}
+
+/* Misc */
+
+.big-btn{
+	padding: 20px;
+	border: 1px solid black;
+	width: auto;
+	max-width: 100px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.floatr{ float: right;}
+.floatl{ float: left;}
+
+.striped-table{
+	width: 100%;
+}
+
+.striped-table tr:nth-child(even) {
+  background-color: silver;
+}
+
+.striped-table tr:nth-child(odd) {
+  background-color: white;
+}
+
+.striped-table tr:first-child{
+	background-color: gray;
+	font-weight: bold;
 }

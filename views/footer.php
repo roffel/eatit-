@@ -1,6 +1,6 @@
 		</div> <!-- // wrapper -->
 		<div id="footer">
-			<br /><br /><br /><Br />
+			<br /><br /><br /><br />
 			2014 &copy; EatIT
 		</div>
 	</body>

@@ -5,49 +5,50 @@ class Menus_Model extends Model
 	function __construct()
 	{
 		parent::__construct();
+		Session::init();
 	}
 
 	function getall()
 	{
-		$data = $this->db->select('SELECT * FROM menus WHERE actief = :actief', array(':actief' => 1));
+		$data = $this->db->select('SELECT * FROM Menu WHERE actief = :actief', array(':actief' => 'ja'));
 		return $data;
 	}
 
 	function getbyid($id)
 	{
-		$data = $this->db->select('SELECT * FROM menus WHERE id = :id', array(':id' => $id));
+		$data = $this->db->select('SELECT * FROM Menu WHERE menunr = :id', array(':id' => $id));
 		$data[0]['gerechten'] = array(); 
 		$data[0]['ingredienten'] = array();
 
 		$gerechten = $this->db->select('
 			SELECT 
-				gerechten.naam,
-				gerechten.omschrijving,
-				gerechten.id
-			FROM gerechtenopmenu
-			JOIN gerechten on gerechtenopmenu.gerechtnummer = gerechten.id
-			JOIN menus on gerechtenopmenu.menunummer = menus.id
-			WHERE gerechtenopmenu.menunummer = :id'
+				Gerecht.naam,
+				Gerecht.omschrijving,
+				Gerecht.gerechtnr
+			FROM Gerechtmenu
+			JOIN Gerecht on Gerechtmenu.gerechtnr = Gerecht.gerechtnr
+			JOIN Menu on Gerechtmenu.menunr = Menu.menunr
+			WHERE Gerechtmenu.menunr = :id'
 			, array(':id' => $id));
 
 		$sth = $this->db->prepare("
-			SELECT ingredienten.naam, ingredienten.id
-			FROM ingredienteningerechten
-			JOIN gerechten ON ingredienteningerechten.gerechtid = gerechten.id
-			JOIN ingredienten ON ingredienteningerechten.ingredientid = ingredienten.id
-			JOIN gerechtenopmenu ON gerechtenopmenu.gerechtnummer = gerechten.id
-			JOIN menus ON menus.id = gerechtenopmenu.menunummer
-			WHERE menus.id = ".$id."
+			SELECT Ingredient.naam, Ingredient.ingredientnr
+			FROM Ingredientgerecht
+			JOIN Gerecht ON Ingredientgerecht.gerechtnr = Gerecht.nr
+			JOIN Ingredient ON Ingredientgerecht.ingredientnr = Ingredient.ingredientnr
+			JOIN Gerechtmenu ON Gerechtmenu.gerechtnr = Gerecht.gerechtnr
+			JOIN Menu ON Menu.menunr = Gerechtmenu.menunr
+			WHERE Menu.menunr = ".$id."
 		");
 
 		$ingredienten = $this->db->select('
-			SELECT ingredienten.naam, ingredienten.id
-			FROM ingredienteningerechten
-			JOIN gerechten ON ingredienteningerechten.gerechtid = gerechten.id
-			JOIN ingredienten ON ingredienteningerechten.ingredientid = ingredienten.id
-			JOIN gerechtenopmenu ON gerechtenopmenu.gerechtnummer = gerechten.id
-			JOIN menus ON menus.id = gerechtenopmenu.menunummer
-			WHERE menus.id = :id'
+			SELECT Ingredient.naam, Ingredient.ingredientnr
+			FROM Ingredientgerecht
+			JOIN Gerecht ON Ingredientgerecht.gerechtnr = Gerecht.gerechtnr
+			JOIN Ingredient ON Ingredientgerecht.ingredientnr = Ingredient.ingredientnr
+			JOIN Gerechtmenu ON Gerechtmenu.gerechtnr = Gerecht.gerechtnr
+			JOIN Menu ON Menu.menunr = Gerechtmenu.menunr
+			WHERE Menu.menunr = :id'
 			, array(':id' => $id));
 		$data[0]['gerechten'] = $gerechten;
 		$data[0]['ingredienten'] = $ingredienten;
