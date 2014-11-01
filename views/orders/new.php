@@ -21,7 +21,7 @@
 	echo "</table>";
 	?>
 	<br />
-	<div class="big-btn floatr">Bestellen</div>
+	<div class="big-btn floatr" onclick="location.href='orders/add'">Bestellen</div>
 </div>
 <div class="bright floatr">
 	<strong>Nog iets te drinken?</strong>

@@ -49,10 +49,18 @@ class Orders_Model extends Model
 		}
 		header('location: ../');
 	}
+
 	function getneworder()
 	{
 		Session::init();
-		$data = $_SESSION['basket'];
+		if(isset($_SESSION['basket']))
+		{
+			$data = $_SESSION['basket'];
+		}
+		else
+		{
+			$data = array();
+		}
 		$orderlist = array();
 		$subtotaal = 0;
 		foreach($data as $orderregel)
@@ -93,5 +101,10 @@ class Orders_Model extends Model
 		$orderlist["dranken"] = $this->db->select('SELECT * FROM Drank');
 		$orderlist["subtotaal"] = $subtotaal;
 		return $orderlist;
+	}
+
+	public function addorder()
+	{
+
 	}
 }

@@ -19,4 +19,10 @@ class Orders extends Controller
 		// $kind = gerecht of drank
 		$this->model->addtoorder($order);
 	}
+
+	function add()
+	{	
+		$this->view->data = $this->model->addorder();
+		$this->view->render('orders/add');
+	}
 }
