@@ -1,5 +1,4 @@
 <?php
-
 class Menus_Model extends Model 
 { 			 // Business logic
 	function __construct()
@@ -30,16 +29,6 @@ class Menus_Model extends Model
 			JOIN Menu on Gerechtmenu.menunr = Menu.menunr
 			WHERE Gerechtmenu.menunr = :id'
 			, array(':id' => $id));
-
-		$sth = $this->db->prepare("
-			SELECT Ingredient.naam, Ingredient.ingredientnr
-			FROM Ingredientgerecht
-			JOIN Gerecht ON Ingredientgerecht.gerechtnr = Gerecht.nr
-			JOIN Ingredient ON Ingredientgerecht.ingredientnr = Ingredient.ingredientnr
-			JOIN Gerechtmenu ON Gerechtmenu.gerechtnr = Gerecht.gerechtnr
-			JOIN Menu ON Menu.menunr = Gerechtmenu.menunr
-			WHERE Menu.menunr = ".$id."
-		");
 
 		$ingredienten = $this->db->select('
 			SELECT Ingredient.naam, Ingredient.ingredientnr

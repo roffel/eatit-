@@ -4,5 +4,6 @@
 	<input type="text" name="email" /><br /><br />
 	Wachtwoord:<br />
 	<input type="password" name="password" /><br /><br />
-	<input type="submit" value="Inloggen" />
+	<br /><br />
+	<a href="<?php echo URL; ?>/login/register" title="Registreren">Geen account? Registreer hier!</a> <input class="floatr" type="submit" value="Inloggen" />
 </form>

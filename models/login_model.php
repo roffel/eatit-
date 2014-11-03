@@ -1,5 +1,4 @@
 <?php
-
 class Login_Model extends Model
 {
 	public function __construct()
@@ -26,15 +25,37 @@ class Login_Model extends Model
 			$_SESSION['user'] = array();
 			$_SESSION['user']['email'] 	= $data[0]['email'];
 			$_SESSION['user']['rang'] 	= $data[0]['rang'];
-			if($_SESSION['user']['rang'] == 'gebruiker')
-			{
-				/* Hier moet het klantnummer opgehaald worden en aan de sessie gehangen worden */
-			}
 			header('location: ../dashboard');
 		}
 		else
 		{
 			header('location: ../login');
+		}
+	}
+
+	public function register()
+	{
+		if(isset($_POST['voornaam']))
+		{
+			$password = substr(strrev(md5($_POST['voornaam']."supervet".$_POST['straat'])),3,8);
+			$this->db->insert('Gebruiker', array(
+				'password' 		=> $password,
+				'email'			=> $_POST['email']
+			));
+
+			$this->db->insert('Klant', array(
+				'achternaam' 	=> ucfirst($_POST['achternaam']),
+				'tussenvoegsel' => strtolower($_POST['tussenvoegsel']),
+				'voornaam'		=> ucfirst($_POST['voornaam']),
+				'adres'			=> ucfirst($_POST['straat'])." ".$_POST['huisnummer'],
+				'postcode'		=> strtoupper($_POST['postcode']),
+				'woonplaats'	=> ucfirst($_POST['woonplaats']),
+				'email'			=> $_POST['email'],
+			));
+
+			$email = "Uw registratie bij EatIT is gelukt! U kunt inloggen met ".$password." nadat u uw account heeft geactiveerd via deze link.";
+			mail($_POST['email'], 'Registratie EatIT', $email);
+			die($email);
 		}
 	}
 }

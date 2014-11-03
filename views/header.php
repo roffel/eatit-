@@ -10,11 +10,12 @@
 			<a href="<?=URL?>index">Home</a>
 			<a href="<?=URL?>menus">Menu's</a>
 			<?php if (Session::get('loggedIn') == true):?>
-				<a href="<?php echo URL; ?>orders">Bestellijst</a>	
+				<a href="<?php echo URL; ?>orders">Bestellijst</a>
+				<a href="<?=URL?>instellingen">Instellingen</a>
 				<a href="<?php echo URL; ?>dashboard/logout" class="floatr">Uitloggen</a>	
 			<?php else: ?>
 				<a href="<?php echo URL; ?>login" class="floatr">Inloggen</a>
-			<?php endif; ?>	
+			<?php endif; ?>
 		</div>	
 	</div>
 	<div id="wrapper">

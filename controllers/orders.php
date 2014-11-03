@@ -25,4 +25,16 @@ class Orders extends Controller
 		$this->view->data = $this->model->addorder();
 		$this->view->render('orders/add');
 	}
+
+	function all()
+	{	
+		$this->view->data = $this->model->getall();
+		$this->view->render('orders/all');
+	}
+
+	public function details($id)
+	{
+		$this->view->data = $this->model->getbyid($id);
+		$this->view->render('orders/details');
+	}
 }
