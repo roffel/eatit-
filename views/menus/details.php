@@ -6,7 +6,14 @@ foreach ($menus as $menu)
     echo "	<span>Categorie: Vegetarisch</span><br /> \n";
     echo "	<span>Prijs: &euro;$menu[prijs]</span>";
     echo "	<p>$menu[omschrijving]</p>\n";
-    echo ' 	<div class="detail-order-btn"><a href="'.URL.'orders/addtoorder/'.$menu['menunr'].'-menu">Bestellen</a></div>';
+    if(@$_SESSION['user']['rang'] != "gebruiker")
+    {
+        echo '<div class="big-btn"><a href="'.URL.'login">Inloggen om te bestellen.</a></div>';
+    }
+    else
+    {
+        echo '<div class="big-btn"><a href="'.URL.'orders/addtoorder/'.$menu['menunr'].'-menu">Bestellen</a></div>';
+    }
 }
 
 echo "<h2>Op dit menu:</h2>";

@@ -1,5 +1,16 @@
-<?php $data = $this->data[0]; ?>
+<?php
+	$data = $this->data[0];
+	if(isset($this->melding))
+	{
+		$melding = $this->melding;
+	}
+	else
+	{
+		$melding = "";
+	}
+?>
 <h1>Instellingen</h1>
+<div id="melding"><?=$melding;?></div>
 <form  method="post" action="instellingen/opslaan">
 	<table style="width: 100%;">
 		<tr>

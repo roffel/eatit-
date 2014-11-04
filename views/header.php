@@ -9,13 +9,25 @@
 		<div class="menu">
 			<a href="<?=URL?>index">Home</a>
 			<a href="<?=URL?>menus">Menu's</a>
-			<?php if (Session::get('loggedIn') == true):?>
-				<a href="<?php echo URL; ?>orders">Bestellijst</a>
-				<a href="<?=URL?>instellingen">Instellingen</a>
-				<a href="<?php echo URL; ?>dashboard/logout" class="floatr">Uitloggen</a>	
-			<?php else: ?>
-				<a href="<?php echo URL; ?>login" class="floatr">Inloggen</a>
-			<?php endif; ?>
+			<?php 
+			if (Session::get('loggedIn') == true)
+			{
+				if($_SESSION['user']['rang'] == "gebruiker")
+				{
+					echo "<a href=\"".URL."orders\">Bestellijst</a>";
+					echo "<a href=\"".URL."orders\">Instellingen</a>";
+				}
+				elseif ($_SESSION['user']['rang'])
+				{
+					echo "<a href=\"".URL."orders/all\">Beheer</a>";
+				}
+				echo "<a href=\"".URL."dashboard/logout\">Uitloggen</a>";	
+			} 
+			else
+			{
+				echo "<a href=\"".URL."login\">Inloggen</a>";
+			}
+			?>
 		</div>	
 	</div>
 	<div id="wrapper">

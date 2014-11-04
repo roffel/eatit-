@@ -16,5 +16,10 @@ class Login extends Controller
 	{
 		$this->model->run();
 	}
+
 	function register()
+	{
+		$this->model->register();
+		$this->view->render('login/register');
+	}
 }

@@ -128,10 +128,8 @@ class Orders_Model extends Model
 			{
 				$soort   = $orderregel['soort'];
 				$menunr  = $orderregel['menunr'];
-				echo $soort;
 				if($soort == 'side')
 				{
-					echo "Hier komt ie";
 					$this->db->insert('Orderregel', array(
 						'ordernr'	=> $ordernr,
 						'dranknr'	=> $menunr
@@ -145,6 +143,9 @@ class Orders_Model extends Model
 					));	
 				}
 			}
+			$data = $this->db->select('SELECT * FROM `Klant` WHERE `Klant`.`email` = :email'
+			, array(':email' => $_SESSION['user']['email']));
+			return $data;
 		}
 		else
 		{

@@ -44,4 +44,9 @@ class Menus_Model extends Model
 
 		return $data;
 	}
+
+	function getdaghap()
+	{
+		echo "bla";
+	}
 }

@@ -37,7 +37,12 @@ class instellingen_Model extends Model
 					, "`email` = '".$_SESSION['user']['email']."'"
 				);
 			}
+			$melding = 'Opgeslagen!';
 		}
-		header('Location:'.URL.'instellingen');
+		else
+		{
+			$melding = 'Huh geen post, hoe doe je dit?';
+		}
+		return $melding;
 	}
 }

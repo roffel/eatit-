@@ -15,6 +15,8 @@ class Instellingen extends Controller
 
 	function opslaan()
 	{	
-		$this->view->data = $this->model->savesettings();
+		$this->view->melding = $this->model->savesettings();
+		$this->view->data = $this->model->getsettings();
+		$this->view->render('instellingen/index');
 	}
 }

@@ -34,11 +34,10 @@ body{
 	float: left;
 }
 
-.active-menu{
-	float: left;
+.daghap{
 	border: 1px solid silver;
-	width: 200px;
-	height: 250px;
+	width: 90%;
+	padding: 20px;
 	cursor: pointer;
 }
 
