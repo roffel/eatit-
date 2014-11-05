@@ -19,7 +19,7 @@ class Login extends Controller
 
 	function register()
 	{
-		$this->model->register();
+		$this->view->text = $this->model->register();
 		$this->view->render('login/register');
 	}
 

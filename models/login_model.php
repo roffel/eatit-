@@ -38,25 +38,53 @@ class Login_Model extends Model
 	{
 		if(isset($_POST['voornaam']))
 		{
-			$password = substr(strrev(md5($_POST['voornaam']."supervet".$_POST['straat'])),3,8);
-			$this->db->insert('Gebruiker', array(
-				'password' 		=> $password,
-				'email'			=> $_POST['email']
+			$sth = $this->db->prepare("SELECT email FROM Gebruiker WHERE
+			email = :email");
+			$sth->execute(array(
+				':email' 	=> $_POST['email']
 			));
+			$data 	= $sth->fetchAll();
 
-			$this->db->insert('Klant', array(
-				'achternaam' 	=> ucfirst($_POST['achternaam']),
-				'tussenvoegsel' => strtolower($_POST['tussenvoegsel']),
-				'voornaam'		=> ucfirst($_POST['voornaam']),
-				'adres'			=> ucfirst($_POST['straat'])." ".$_POST['huisnummer'],
-				'postcode'		=> strtoupper($_POST['postcode']),
-				'woonplaats'	=> ucfirst($_POST['woonplaats']),
-				'email'			=> $_POST['email'],
-			));
+			$count 	=  $sth->rowCount();
+			if($count > 0)
+			{
+				$text = "<div class=\"error\">Er bestaat al een account met de e-mailadres.</div>";
+			}
+			else
+			{
+				if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
+				{
+					$password = substr(strrev(md5($_POST['voornaam']."supervet".$_POST['straat'])),3,8);
+					$this->db->insert('Gebruiker', array(
+						'password' 		=> $password,
+						'email'			=> $_POST['email']
+					));
 
-			$email = "Uw registratie bij EatIT is gelukt! U kunt inloggen met ".$password." nadat u uw account heeft geactiveerd via deze link.";
-			mail($_POST['email'], 'Registratie EatIT', $email);
-			die($email);
+					$this->db->insert('Klant', array(
+						'achternaam' 	=> ucfirst($_POST['achternaam']),
+						'tussenvoegsel' => strtolower($_POST['tussenvoegsel']),
+						'voornaam'		=> ucfirst($_POST['voornaam']),
+						'adres'			=> ucfirst($_POST['straat'])." ".$_POST['huisnummer'],
+						'postcode'		=> strtoupper($_POST['postcode']),
+						'woonplaats'	=> ucfirst($_POST['woonplaats']),
+						'email'			=> $_POST['email'],
+					));
+
+					$email = "<div class=\"succes\">Uw registratie bij EatIT is gelukt! U kunt inloggen met ".$password." nadat u uw account heeft geactiveerd via deze <a href=\"".URL."login/activate/".$_POST['email']."\">link.</div>";
+					$email .= "<script>$(document).ready( function(){ $('#regform').hide(); $('h1').hide();});</script>";
+					//mail($_POST['email'], 'Registratie EatIT', $email);
+					$text = $email;
+				}
+				else
+				{
+					$text = "<div class=\"error\">".$_POST['email']." is geen geldig e-mailadres.</div>";
+				}
+			}
+			return $text;
+		}
+		else
+		{
+			$text = "";
 		}
 	}
 

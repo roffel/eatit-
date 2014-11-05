@@ -32,6 +32,12 @@ class Orders extends Controller
 		$this->view->render('orders/all');
 	}
 
+	function emptyorder()
+	{	
+		$this->view->text = $this->model->emptyorder();
+		$this->view->render('index/page');
+	}
+
 	public function details($id)
 	{
 		$this->view->data = $this->model->getbyid($id);

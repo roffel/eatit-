@@ -23,6 +23,7 @@
 	echo "</table>";
 	?>
 	<br />
+	<div class="big-btn floatl" onclick="location.href='<?= URL ?>orders/emptyorder'">Legen</div>
 	<div class="big-btn floatr" onclick="location.href='<?= URL ?>orders/add'">Bestellen</div>
 </div>
 <div class="bright floatr">

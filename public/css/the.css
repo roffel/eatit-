@@ -34,6 +34,12 @@ body{
 	float: left;
 }
 
+.menu .lurl{
+	position: absolute;
+	right: 20px;
+	top: 37px;
+}
+
 .daghap{
 	border: 1px solid silver;
 	width: 90%;
@@ -61,6 +67,9 @@ body{
 	padding: 20px;
 	min-height: 120px;
 }
+
+#footer a{ padding-left: 20px;}
+
 /* Bestellijst */
 .bleft{
 	width: 60%;
@@ -94,6 +103,7 @@ body{
 #statusform{
 	display: none;
 }
+
 /* Misc */
 
 .big-btn{

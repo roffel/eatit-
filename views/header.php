@@ -21,11 +21,11 @@
 				{
 					echo "<a href=\"".URL."orders/all\">Beheer</a>";
 				}
-				echo "<a href=\"".URL."dashboard/logout\">Uitloggen</a>";	
+				echo "<a href=\"".URL."dashboard/logout\" class=\"lurl\">Uitloggen</a>";	
 			} 
 			else
 			{
-				echo "<a href=\"".URL."login\">Inloggen</a>";
+				echo "<a href=\"".URL."login\" class=\"lurl\">Inloggen</a>";
 			}
 			?>
 		</div>	

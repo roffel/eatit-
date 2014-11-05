@@ -1,5 +1,6 @@
+<?= $this->text; ?>
 <h1>Registreren</h1>
-<form method="post">
+<form method="post" id="regform">
 	<table style="width: 100%;">
 		<tr>
 			<td>Voornaam:</td><td colspan="3"><input name="voornaam" type="text" /></td>

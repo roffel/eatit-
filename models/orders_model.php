@@ -168,6 +168,14 @@ class Orders_Model extends Model
 		}	
 	}
 
+	function emptyorder()
+	{
+		Session::init();
+		$_SESSION['basket'] = array();
+		$text = "<h1>Gelukt</h1><p>De bestellijst is gewist.</p>";
+		return $text;
+	}
+
 	function getall()
 	{
 		SESSION::init();
