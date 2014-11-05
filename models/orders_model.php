@@ -110,14 +110,74 @@ class Orders_Model extends Model
 		if(isset($_SESSION['basket']))
 		{
 			$data = $_SESSION['basket'];
-		
+			foreach($data as $menu)
+			{
+				if($menu['soort'] == "menu")
+				{
+					$ingredienten = $this->db->select('
+					SELECT Ingredient.naam, Ingredient.ingredientnr, Ingredientgerecht.hoeveelheid
+					FROM Ingredientgerecht
+					JOIN Gerecht ON Ingredientgerecht.gerechtnr = Gerecht.gerechtnr
+					JOIN Ingredient ON Ingredientgerecht.ingredientnr = Ingredient.ingredientnr
+					JOIN Gerechtmenu ON Gerechtmenu.gerechtnr = Gerecht.gerechtnr
+					JOIN Menu ON Menu.menunr = Gerechtmenu.menunr
+					WHERE Menu.menunr = :id'
+					, array(':id' => $menu['menunr']));
+					foreach($ingredienten as $ingredient)
+					{
+						
+						$voorraad = $this->db->select('
+						SELECT Ingredient.naam, Ingredient.ingredientnr, Ingredient.hoeveelheid as voorraad
+						FROM Ingredient
+						WHERE Ingredient.ingredientnr = :id'
+						, array(':id' => $ingredient['ingredientnr']));
+
+						$hoeveelheid = $this->db->select('
+						SELECT Ingredient.naam, Ingredient.ingredientnr, Ingredientgerecht.hoeveelheid
+						FROM Ingredientgerecht
+						JOIN Gerecht ON Ingredientgerecht.gerechtnr = Gerecht.gerechtnr
+						JOIN Ingredient ON Ingredientgerecht.ingredientnr = Ingredient.ingredientnr
+						WHERE Ingredient.ingredientnr = :id'
+						, array(':id' => $ingredient['ingredientnr']));
+						// Hoeveel is er nodig?
+						$hoeveelheid = $hoeveelheid[0]['hoeveelheid'];
+						// Wat is de voorraad?
+						$voorraad = $voorraad[0]['voorraad'];
+						// Beschikbaar = Wat er is - wat je nodig bent.
+						$beschikbaar = $voorraad - $hoeveelheid;
+						// Klap dat in 'n array met als iets beschikbaar is
+						$beschikbaarheidchk = array();
+						if($beschikbaar <= 0)
+						{
+							$beschikbaarheidchk[] = '0';
+						}
+						else
+						{
+							$beschikbaarheidchk[] = '1';
+						}
+						// Check als iets niet beschikbaar is, geef error
+						if (in_array("0", $beschikbaarheidchk)) {
+							die("Er is een menu niet beschikbaar");
+						}
+					}
+				}
+				elseif($menu['soort'] == 'side')
+				{
+					$drankdata = $this->db->select('SELECT * FROM `Drank` WHERE `Dranknr` = :dranknr'
+					, array(':dranknr' => $menu['menunr']));
+					if($drankdata[0]['voorraad'] < $menu['aantal'])
+					{
+						die("Er is een sideorder niet beschikbaar.");
+					}
+				}
+			}
 			$orderlist = array();
 			$subtotaal = 0;
-			$klantdata = $this->db->select('SELECT `klantnr` FROM Klant');
-			$klantnr = $klantdata[0]['klantnr'];
+			
+			$klantdata = $this->db->select('SELECT `klantnr` FROM `Klant` WHERE `email` = :email'
+			, array(':email' => $_SESSION['user']['email']));
 
-			$table = 'Order';
-		
+			$klantnr = $klantdata[0]['klantnr'];
 			$sth = $this->db->prepare("INSERT INTO `Order` (klantnr)
 			    VALUES(:klantnr)");
 			$sth->execute(array(
@@ -151,6 +211,34 @@ class Orders_Model extends Model
 				}
 				if($soort == 'menu')
 				{
+					/* Voorraad verlagen */
+					foreach($ingredienten as $ingredient)
+					{
+						// Voorraad checken
+						$voorraad = $this->db->select('
+						SELECT Ingredient.naam, Ingredient.ingredientnr, Ingredient.hoeveelheid as voorraad
+						FROM Ingredient
+						WHERE Ingredient.ingredientnr = :id'
+						, array(':id' => $ingredient['ingredientnr']));
+						// Hoeveelheid checken
+						$hoeveelheid = $this->db->select('
+						SELECT Ingredient.naam, Ingredient.ingredientnr, Ingredientgerecht.hoeveelheid
+						FROM Ingredientgerecht
+						JOIN Gerecht ON Ingredientgerecht.gerechtnr = Gerecht.gerechtnr
+						JOIN Ingredient ON Ingredientgerecht.ingredientnr = Ingredient.ingredientnr
+						WHERE Ingredient.ingredientnr = :id'
+						, array(':id' => $ingredient['ingredientnr']));
+						
+						// Checken wat de nieuwe voorraad moet zijn
+						$min = $voorraad[0]['voorraad'] - $hoeveelheid['0']['hoeveelheid'] * $aantal;
+						// Voorraad updaten in DB 
+						$this->db->update('`Ingredient`', array(
+							'hoeveelheid' => $min
+							)
+							, "ingredientnr = '".$ingredient['ingredientnr']."'"
+						);
+					}
+					/* Gebleven */
 					$this->db->insert('Orderregel', array(
 						'ordernr'	=> $ordernr,
 						'menunr'	=> $menunr,
