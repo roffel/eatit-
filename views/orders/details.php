@@ -25,7 +25,7 @@ Status: <strong id="orderstatus"><?=$data['status'];?></strong> <a href="#orders
 <?php
 	foreach ($data['orderregels'] as $orderregel)
 	{
-		echo "<tr><td>".$orderregel['menu']."".$orderregel['side']."</td><td></td><td>&euro; ".$orderregel['prijs']."</td></tr>";
+		echo "<tr><td>".$orderregel['menu']."".$orderregel['side']."</td><td>".$orderregel['aantal']."</td><td>&euro; ".$orderregel['prijs']."</td></tr>";
 	}
 	echo "<tr><td></td><td>Subtotaal:</td><td>&euro; ".$data['subtotaal']."</td></tr>";
 ?>

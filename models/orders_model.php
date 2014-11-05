@@ -99,7 +99,7 @@ class Orders_Model extends Model
 			);
 			$subtotaal = $subtotaal + ($details[0]['prijs'] * $orderregel['aantal']);
 		}
-		$orderlist["dranken"] = $this->db->select('SELECT * FROM Drank');
+		$orderlist["dranken"] = $this->db->select('SELECT * FROM Drank  WHERE `Drank`.`voorraad` > 0');
 		$orderlist["subtotaal"] = $subtotaal;
 		return $orderlist;
 	}
@@ -194,13 +194,14 @@ class Orders_Model extends Model
 				, "ordernr = '".$id."'"
 			);
 		}
+
 		$orderregels = $this->db->select('
 			SELECT * FROM  `Order`
 			JOIN `Klant` ON (`Klant`.`klantnr` = `Order`.`klantnr`)
 			JOIN `Orderregel` ON (`Order`.`Ordernr` = `Orderregel`.`Ordernr`)
 			WHERE `Orderregel`.`Ordernr` = :ordernr'
 			, array(':ordernr' => $id)
-			);
+		);
 
 
 		$data = array();
@@ -224,9 +225,10 @@ class Orders_Model extends Model
 				$menudata = $this->db->select('SELECT `naam`, `prijs` FROM `Menu` WHERE `Menu`.`menunr` = :menunr'
 				, array(':menunr' => $orderregel['menunr']));
 
-				$menu  = $menudata[0]['naam'];
-				$side  = "";
-				$prijs = $menudata[0]['prijs'];
+				$menu  	= $menudata[0]['naam'];
+				$side  	= "";
+				$prijs 	= $menudata[0]['prijs'];
+				$aantal = $orderregel['aantal'];
 			}
 			else
 			{
@@ -236,14 +238,16 @@ class Orders_Model extends Model
 				$menu = "";
 				$side = $sidedata[0]['naam'];
 				$prijs = $sidedata[0]['prijs'];
+				$aantal = $orderregel['aantal'];
 			}
 			$data['orderregels'][] = 
 				array(
-					"menu" 	=> $menu,
-					"side"	=> $side,
-					"prijs" => $prijs
+					"menu" 		=> $menu,
+					"side"		=> $side,
+					"prijs" 	=> $prijs * $aantal,
+					"aantal"	=> $aantal
 				);
-			$data["subtotaal"] =  $data["subtotaal"] + $prijs;		
+			$data["subtotaal"] =  $data["subtotaal"] + ($prijs * $aantal);		
 		}
 		return $data;	
 	}

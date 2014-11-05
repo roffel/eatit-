@@ -18,4 +18,10 @@ class Menus extends Controller
 		$this->view->data = $this->model->getbyid($id);
 		$this->view->render('menus/details');
 	}
+
+	public function daghap()
+	{
+		$this->view->text = $this->model->getdaghap();
+		$this->view->render('index/page', true);
+	}
 }

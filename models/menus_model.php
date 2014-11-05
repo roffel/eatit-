@@ -41,16 +41,9 @@ class Menus_Model extends Model
 			, array(':id' => $id));
 		$data[0]['gerechten'] = $gerechten;
 		$data[0]['ingredienten'] = $ingredienten;
-		/* ----------- */
-		$ingredienten = $this->db->select('
-			SELECT Ingredient.naam, Ingredient.ingredientnr, Ingredientgerecht.hoeveelheid
-			FROM Ingredientgerecht
-			JOIN Gerecht ON Ingredientgerecht.gerechtnr = Gerecht.gerechtnr
-			JOIN Ingredient ON Ingredientgerecht.ingredientnr = Ingredient.ingredientnr
-			JOIN Gerechtmenu ON Gerechtmenu.gerechtnr = Gerecht.gerechtnr
-			JOIN Menu ON Menu.menunr = Gerechtmenu.menunr
-			WHERE Menu.menunr = :id'
-			, array(':id' => $id));
+
+		/* ----- Voorraad Check ------ */
+
 		foreach($ingredienten as $ingredient)
 		{
 			$voorraad = $this->db->select('
@@ -90,12 +83,28 @@ class Menus_Model extends Model
 			{
 				$data[0]['beschikbaar'] = 1;
 			}
+			/* ---- Einde voorraad check ---- */
 		}
 		return $data;
 	}
 
 	function getdaghap()
 	{
-		echo "bla";
+		$daghappen = $this->db->select('
+			SELECT menunr, naam, omschrijving, prijs
+			FROM Menu
+			WHERE daghap = :actief'
+			, array(':actief' => '1')
+		);
+
+		foreach($daghappen as $daghap)
+		{
+			$text = '<base target="_parent" />';
+			$text.= "<h1>".$daghap['naam']."</h1>";
+			$text.= "<p>Voor maar &euro;".$daghap['prijs']."</p>";
+			$text.= "<p>".$daghap['omschrijving']."</p>";
+			$text.= "<div onclick=\"window.parent.location='".URL."menus/details/".$daghap['menunr']."';\" class=\"big-btn\" style=\"padding: 20px; border: 1px solid black; width: 150px; text-align: center; cursoir: pointer;\">Meer informatie</div>";
+		}
+		return $text;
 	}
 }
