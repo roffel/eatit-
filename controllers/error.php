@@ -9,7 +9,7 @@ class Error extends Controller
 
 	function index()
 	{
-		$this->view->msg = 'Deze pagina bestaat niet';
+		$this->view->msg = 'Deze pagina bestaat niet. :(';
 		$this->view->render('error/index');
 	}
 }

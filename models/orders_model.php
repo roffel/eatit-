@@ -35,6 +35,7 @@ class Orders_Model extends Model
 			}
 			else
 			{
+				// Wel in de kar? +1!
 				$_SESSION['basket'][$idx]['aantal']++;
 			}
 		}
@@ -116,30 +117,44 @@ class Orders_Model extends Model
 			$klantnr = $klantdata[0]['klantnr'];
 
 			$table = 'Order';
+		
 			$sth = $this->db->prepare("INSERT INTO `Order` (klantnr)
 			    VALUES(:klantnr)");
 			$sth->execute(array(
-			    "klantnr" => $klantnr
+			   "klantnr" => $klantnr
 			));
 
 			$ordernr = $this->db->lastInsertId();
-			
 			foreach($data as $orderregel)
 			{
 				$soort   = $orderregel['soort'];
 				$menunr  = $orderregel['menunr'];
+				$aantal  = $orderregel['aantal'];
 				if($soort == 'side')
 				{
+					$drankdata = $this->db->select('SELECT * FROM `Drank` WHERE `Dranknr` = :dranknr'
+					, array(':dranknr' => $menunr));
+					
+					// Wat gaat er af in de inhoud bij dranken?
+					$min = $drankdata[0]['hoeveelheid'] * $orderregel['aantal'];
+					$this->db->update('`Drank`', array(
+						'voorraad' => $drankdata[0]["voorraad"] - $min
+					)
+					, "dranknr = '".$menunr."'"
+					);
+
 					$this->db->insert('Orderregel', array(
 						'ordernr'	=> $ordernr,
-						'dranknr'	=> $menunr
+						'dranknr'	=> $menunr,
+						'aantal'	=> $aantal
 					));
 				}
 				if($soort == 'menu')
 				{
 					$this->db->insert('Orderregel', array(
 						'ordernr'	=> $ordernr,
-						'menunr'	=> $menunr
+						'menunr'	=> $menunr,
+						'aantal'  	=> $aantal
 					));	
 				}
 			}
@@ -170,6 +185,15 @@ class Orders_Model extends Model
 	function getbyid($id)
 	{
 		SESSION::init();
+		if(isset($_POST['editstatus']))
+		{
+			$status = $_POST['editstatus'];
+			$this->db->update('`Order`', array(
+				'status' => $status
+				)
+				, "ordernr = '".$id."'"
+			);
+		}
 		$orderregels = $this->db->select('
 			SELECT * FROM  `Order`
 			JOIN `Klant` ON (`Klant`.`klantnr` = `Order`.`klantnr`)
@@ -191,31 +215,35 @@ class Orders_Model extends Model
 		$data["status"] = $orderregels[0]['status'];
 		$data["tijd"] = $orderregels[0]['tijd'];
 		$data["orderregels"] = array();
-
-
+		$data["subtotaal"] = 0;
+ 
 		foreach($orderregels as $orderregel)
 		{
 			if($orderregel['menunr'] != "")
 			{
-				$menu = $this->db->select('SELECT `naam` FROM `Menu` WHERE `Menu`.`menunr` = :menunr'
+				$menudata = $this->db->select('SELECT `naam`, `prijs` FROM `Menu` WHERE `Menu`.`menunr` = :menunr'
 				, array(':menunr' => $orderregel['menunr']));
-		
-				$menu = $menu[0]['naam'];
-				$side = "";
+
+				$menu  = $menudata[0]['naam'];
+				$side  = "";
+				$prijs = $menudata[0]['prijs'];
 			}
 			else
 			{
-				$side = $this->db->select('SELECT `naam` FROM `Drank` WHERE `Drank`.`dranknr` = :dranknr'
+				$sidedata = $this->db->select('SELECT `naam`, `prijs` FROM `Drank` WHERE `Drank`.`dranknr` = :dranknr'
 				, array(':dranknr' => $orderregel['dranknr']));
 		
 				$menu = "";
-				$side = $side[0]['naam'];
+				$side = $sidedata[0]['naam'];
+				$prijs = $sidedata[0]['prijs'];
 			}
 			$data['orderregels'][] = 
 				array(
 					"menu" 	=> $menu,
-					"side"	=> $side
+					"side"	=> $side,
+					"prijs" => $prijs
 				);
+			$data["subtotaal"] =  $data["subtotaal"] + $prijs;		
 		}
 		return $data;	
 	}

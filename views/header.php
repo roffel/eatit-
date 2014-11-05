@@ -15,7 +15,7 @@
 				if($_SESSION['user']['rang'] == "gebruiker")
 				{
 					echo "<a href=\"".URL."orders\">Bestellijst</a>";
-					echo "<a href=\"".URL."orders\">Instellingen</a>";
+					echo "<a href=\"".URL."instellingen\">Instellingen</a>";
 				}
 				elseif ($_SESSION['user']['rang'])
 				{

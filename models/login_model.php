@@ -8,12 +8,13 @@ class Login_Model extends Model
 
 	public function run()
 	{
-		// sth = statement
+		// sth = statement handler
 		$sth = $this->db->prepare("SELECT email, rang FROM Gebruiker WHERE
-			email = :email AND password = :password");
+			email = :email AND password = :password AND actief = :actief");
 		$sth->execute(array(
 			':email' 	=> $_POST['email'],
-			':password' => $_POST['password']
+			':password' => $_POST['password'],
+			':actief'	=> 'ja'
 		));
 		$data 	= $sth->fetchAll();
 
@@ -29,7 +30,7 @@ class Login_Model extends Model
 		}
 		else
 		{
-			header('location: ../login');
+			header('location: ../login?error=Gegevens%20zijn%20onjuist%20of%20het%20account%20is%20nog%20niet%20geactiveerd.');
 		}
 	}
 
@@ -57,5 +58,33 @@ class Login_Model extends Model
 			mail($_POST['email'], 'Registratie EatIT', $email);
 			die($email);
 		}
+	}
+
+	public function activate($email)
+	{
+		$sth = $this->db->prepare("SELECT `email` FROM `Gebruiker` WHERE
+			email = :email AND actief = :actief");
+		$sth->execute(array(
+			':email' 	=> $email,
+			':actief'	=> 'nee'
+		));
+		
+		$data 	= $sth->fetchAll();
+
+		$count 	=  $sth->rowCount();
+		if($count > 0)
+		{
+			$this->db->update('`Gebruiker`', array(
+				'actief' => 'ja'
+				)
+				, "email = '".$email."'"
+			);
+			$text = "<h1>Gelukt!</h1>".$email." is geactiveerd! Inloggen kan <a href=\"".URL."/login\" title=\"Inloggen\">hier</a>.<br /><br /><br /><br /><br /><br /><br />";
+		}
+		else
+		{
+			$text = "Het account ".$email." is al geactiveerd of bestaat helemaal niet.";
+		}
+		return $text;
 	}
 }

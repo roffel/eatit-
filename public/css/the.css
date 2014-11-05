@@ -87,6 +87,10 @@ body{
 	cursor: pointer;
 }
 
+
+#statusform{
+	display: none;
+}
 /* Misc */
 
 .big-btn{
@@ -96,6 +100,14 @@ body{
 	max-width: 100px;
 	text-align: center;
 	cursor: pointer;
+}
+
+.error{
+	background-color: rgb(245, 112, 112);
+	padding: 20px;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	color: rgb(58, 48, 48);
 }
 
 .floatr{ float: right;}

@@ -2,6 +2,8 @@
 	<h1>Bestellijst</h1>
 	<?php
 	$orderregels = $this->data;
+	if($orderregels['subtotaal'] != 0)
+	{
 	echo "<table class=\"striped-table\">";
 	echo "<tr><td>Naam:</td><td>Aantal:</td><td>Prijs:</td><td>Totaal:</td></tr>";
 	foreach ($orderregels as $orderregel)
@@ -33,6 +35,8 @@
 		}
 		?>
 	</ul>
+	<?php } // Einde if geen 
+	else { echo "Geen artikelen op de bestellijst."; } ?>
 </div>
 <div style="clear: both;"></div>
 <script>

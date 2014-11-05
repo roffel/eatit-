@@ -1,4 +1,10 @@
 <h1>Inloggen</h1>
+<?php
+	if(isset($_GET['error']))
+	{
+		echo "<div class=\"error\">".$_GET['error']."</div>";
+	}
+?>
 <form action="login/run" method="post">
 	E-mail:<br />
 	<input type="text" name="email" /><br /><br />

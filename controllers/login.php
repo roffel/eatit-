@@ -22,4 +22,10 @@ class Login extends Controller
 		$this->model->register();
 		$this->view->render('login/register');
 	}
+
+	function activate($email)
+	{
+		$this->view->text = $this->model->activate($email);
+		$this->view->render('index/page');
+	}
 }
