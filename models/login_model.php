@@ -26,7 +26,14 @@ class Login_Model extends Model
 			$_SESSION['user'] = array();
 			$_SESSION['user']['email'] 	= $data[0]['email'];
 			$_SESSION['user']['rang'] 	= $data[0]['rang'];
-			header('location: ../dashboard');
+			if($_SESSION['user']['rang'] == "gebruiker")
+			{
+				header('location: '.URL.'dashboard');
+			}
+			elseif($_SESSION['user']['rang'] == "admin")
+			{
+				header('location: '.URL.'orders/all');
+			}
 		}
 		else
 		{
