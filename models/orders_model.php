@@ -281,6 +281,9 @@ class Orders_Model extends Model
 	function getbyid($id)
 	{
 		SESSION::init();
+		if($_SESSION['user']['rang'] == 'gebruiker')
+		{	
+		}
 		if(isset($_POST['editstatus']))
 		{
 			$status = $_POST['editstatus'];

@@ -1,5 +1,5 @@
 <div class="bleft floatl">
-	<h1>Bestellijst</h1>
+	<h1>Mijn bestellijst</h1>
 	<?php
 	$orderregels = $this->data;
 	if($orderregels['subtotaal'] != 0)
