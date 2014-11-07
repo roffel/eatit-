@@ -269,7 +269,7 @@ class Orders_Model extends Model
 		SESSION::init();
 		if($_SESSION['user']['rang'] == 'admin')
 		{
-			$data = $this->db->select('SELECT * FROM  `Order` JOIN `Klant` ON (`Klant`.`klantnr` = `Order`.`klantnr`) ORDER BY `Order`.`tijd` ASC');
+			$data = $this->db->select('SELECT * FROM  `Order` JOIN `Klant` ON (`Klant`.`klantnr` = `Order`.`klantnr`) ORDER BY `Order`.`status` <> \'geplaatst\', `Order`.`status` <> \'klaar\', `Order`.`status` <> \'afgehandeld\', `Order`.`tijd` ASC');
 			return $data;
 		}
 		else
@@ -283,6 +283,7 @@ class Orders_Model extends Model
 		SESSION::init();
 		if($_SESSION['user']['rang'] == 'gebruiker')
 		{	
+			
 		}
 		if(isset($_POST['editstatus']))
 		{
