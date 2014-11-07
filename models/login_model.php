@@ -75,6 +75,7 @@ class Login_Model extends Model
 						'postcode'		=> strtoupper($_POST['postcode']),
 						'woonplaats'	=> ucfirst($_POST['woonplaats']),
 						'email'			=> $_POST['email'],
+						'telefoon'		=> $_POST['telefoon'],
 					));
 
 					$email = "<div class=\"succes\">Uw registratie bij EatIT is gelukt! U kunt inloggen met ".$password." nadat u uw account heeft geactiveerd via deze <a href=\"".URL."login/activate/".$_POST['email']."\">link.</div>";

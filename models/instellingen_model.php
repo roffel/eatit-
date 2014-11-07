@@ -24,6 +24,7 @@ class instellingen_Model extends Model
 					'achternaam'	=> $_POST['achternaam'],
 					'adres'			=> $_POST['adres'],
 					'postcode'		=> $_POST['postcode'],
+					'telefoon'		=> $_POST['telefoon'],
 					'woonplaats'	=> $_POST['woonplaats']
 				)
 				, "`email` = '".$_SESSION['user']['email']."'"

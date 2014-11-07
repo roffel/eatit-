@@ -123,6 +123,14 @@ body{
 	color: rgb(58, 48, 48);
 }
 
+#melding{
+	padding: 10px;
+	background-color: rgb(157, 226, 157);
+	color: rgb(73, 108, 73);
+	border-radius: 5px;
+	margin-bottom: 17px;
+}
+
 .floatr{ float: right;}
 .floatl{ float: left;}
 

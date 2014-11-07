@@ -11,7 +11,7 @@
 ?>
 <h1>Instellingen</h1>
 <div id="melding"><?=$melding;?></div>
-<form  method="post" action="instellingen/opslaan">
+<form  method="post" action="<?= URL; ?>instellingen/opslaan">
 	<table style="width: 100%;">
 		<tr>
 			<td>Voornaam:</td><td ><input value="<?=$data['voornaam'];?>"name="voornaam" type="text" /></td>
@@ -28,6 +28,9 @@
 		<tr>
 			<td>Postcode:</td><td><input value="<?=$data['postcode'];?>" name="postcode" type="text" /></td>
 		</tr>
+		<tr>
+			<td>Telefoonnummer:</td><td><input value="<?=$data['telefoon'];?>" name="telefoon" type="text" /></td>
+		</tr>		
 		<tr>
 			<td>Woonplaats:</td><td><input value="<?=$data['woonplaats'];?>" name="woonplaats" type="text" /></td>
 		</tr>

@@ -24,6 +24,9 @@
 			<td>Woonplaats:</td><td colspan="3"><input name="woonplaats" type="text" /></td>
 		</tr>
 		<tr>
+			<td>Telefoonnummer:</td><td colspan="3"><input name="telefoon" type="text" /></td>
+		</tr>		
+		<tr>
 			<td colspan="3"><a href="index" title="inloggen">Ik heb al een account</a></td>
 			<td><input type="submit" value="Registreren" /></td>
 		</tr>				
