@@ -24,6 +24,8 @@ class Orders extends Controller
 	{	
 		$this->view->data = $this->model->addorder();
 		$this->view->render('orders/add');
+		// Bestellijst leeggooien
+		$this->view->text = $this->model->emptyorder();
 	}
 
 	function all()
